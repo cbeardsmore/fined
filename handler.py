@@ -6,9 +6,7 @@ def hello(event, context):
         "input": event
     }
 
-    response = {
+    return {
         "statusCode": 200,
         "body": json.dumps(body)
     }
-
-    return response
