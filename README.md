@@ -1,2 +1,27 @@
+[![serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 # fined
-Serverless Slack Bot for managing Team Fines
+
+<img src="./assets/fined_rounded.png" height="100">
+
+
+Slack Bot for managing Team Fines running on the Serverless framework
+
+### Usage
+
+- Fine a user:
+
+    `/fine @user $amount for reason`
+    
+- List fines and their reasons:
+
+    `/fine list`
+    
+- List total fines for the channel:
+
+    `/fine totals`
+    
+- List individual fines for the channel:
+
+    `/fines`
