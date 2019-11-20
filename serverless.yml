@@ -6,7 +6,17 @@ provider:
   name: aws
   runtime: python3.7
   region: us-east-1
+  apiName: fined
+  memorySize: 512
+  cfnRole: arn:aws:iam::XXXXXX:role/role
 
 functions:
-  hello:
-    handler: handler.hello
+  fine:
+    handler: handler.fine
+    description: Fine a user a given amount.
+    events:
+      - http:
+        path: fine
+        method: post
+        private: true
+      
