@@ -25,3 +25,13 @@ Slack Bot for managing Team Fines running on the Serverless framework
 - List individual fines for the channel:
 
     `/fines`
+
+### Serverless Framework
+
+- Install:
+
+    `npm install -g serverless`
+
+- To deploy:
+
+    `serverless deploy`

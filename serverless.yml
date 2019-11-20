@@ -1,0 +1,12 @@
+service: fined
+app: fined
+org: cbeardsmore
+
+provider:
+  name: aws
+  runtime: python3.7
+  region: us-east-1
+
+functions:
+  hello:
+    handler: handler.hello
