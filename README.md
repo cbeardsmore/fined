@@ -35,3 +35,7 @@ Slack Bot for managing Team Fines running on the Serverless framework
 - To deploy:
 
     `serverless deploy`
+
+- Run lambda function locally:
+
+    `serverless invoke local --function fine`

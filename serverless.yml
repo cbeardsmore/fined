@@ -6,7 +6,22 @@ provider:
   name: aws
   runtime: python3.7
   region: us-east-1
+  apiName: fined
+  memorySize: 512
 
 functions:
-  hello:
-    handler: handler.hello
+  fine:
+    handler: fine.handle
+    description: Fine a user a given amount.
+    events:
+      - http:
+          path: fine
+          method: post
+  fines:
+    handler: fines.handle
+    description: List all user fines
+    events:
+      - http:
+          path: fines
+          method: post
+      
