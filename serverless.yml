@@ -8,7 +8,6 @@ provider:
   region: us-east-1
   apiName: fined
   memorySize: 512
-  cfnRole: arn:aws:iam::XXXXXX:role/role
 
 functions:
   fine:
@@ -17,6 +16,14 @@ functions:
     events:
       - http:
         path: fine
+        method: post
+        private: true
+  fines:
+    handler: handler.fines
+    description: List all user fines
+    events:
+      - http:
+        path: fines
         method: post
         private: true
       
