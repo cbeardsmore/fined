@@ -17,6 +17,8 @@ functions:
       - http:
           path: fine
           method: post
+    environment:
+      SLACK_SIGNING_SECRET: ${ssm:/fined/SLACK_SIGNING_SECRET~true}
   fines:
     handler: fines.handle
     description: List all user fines
@@ -24,4 +26,6 @@ functions:
       - http:
           path: fines
           method: post
+    environment:
+      SLACK_SIGNING_SECRET: ${ssm:/fined/SLACK_SIGNING_SECRET~true}
       
