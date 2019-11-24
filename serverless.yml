@@ -36,7 +36,7 @@ resources:
     finesTable: 
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: fines
+        TableName: fines-${opt:stage}
         AttributeDefinitions:
           - AttributeName: teamId
             AttributeType: S
