@@ -1,15 +1,13 @@
 import boto3
 import os
+import json
 
 from urllib.parse import parse_qs
 from auth import isVerifiedRequest
 
-STATUS_CODE_KEY = "statusCode"
-DYNAMO_TABLE_NAME = "fines"
-
 def handle(event, context):
     if not isVerifiedRequest(event):
-        return { STATUS_CODE_KEY: 401 }
+        return { 'statusCode': 401 }
 
     params = parse_qs(event['body'])
     text = params['text'][0]
@@ -22,7 +20,7 @@ def handle(event, context):
 
     dynamodb = boto3.client('dynamodb')
     tableName = os.environ['DYNAMODB_TABLE']
-    response = dynamodb.put_item(
+    dynamodb.put_item(
         TableName=tableName,
         Item={ 
             'teamId': { 'S': team_id }, 
@@ -32,5 +30,24 @@ def handle(event, context):
         }
     )
         
-    print(response)
-    return { STATUS_CODE_KEY: 200 }
+    return {
+        "statusCode": 200,
+        "body": json.dumps(generateResponseBody(user_name)),
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+
+
+def generateResponseBody(user_name):
+    return  {
+        "blocks": [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "@{} has been fined. Shame on them!".format(user_name)
+                }
+            }
+        ]
+    }
