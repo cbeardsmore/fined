@@ -1,4 +1,5 @@
 import boto3
+import os
 
 from urllib.parse import parse_qs
 from auth import isVerifiedRequest
@@ -20,8 +21,9 @@ def handle(event, context):
     print('Team ID -> ', team_id)
 
     dynamodb = boto3.client('dynamodb')
+    tableName = os.environ['DYNAMODB_TABLE']
     response = dynamodb.put_item(
-        TableName=DYNAMO_TABLE_NAME,
+        TableName=tableName,
         Item={ 
             'teamId': { 'S': team_id }, 
             'teamFines': { 'M': 
