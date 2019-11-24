@@ -6,11 +6,24 @@ provider:
   name: aws
   runtime: python3.7
   region: us-east-1
-  apiName: fined
+  apiName: ${self:service}
+  stage: ${opt:stage,'dev'}
+  environment:
+    DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
   memorySize: 512
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}'
   stackTags:
-    PROJECT: fined
-    
+    PROJECT: ${self:service}
+
 functions:
   fine:
     handler: fine.handle
@@ -20,7 +33,7 @@ functions:
           path: fine
           method: post
     environment:
-      SLACK_SIGNING_SECRET: ${ssm:/fined/SLACK_SIGNING_SECRET~true}
+      SLACK_SIGNING_SECRET: ${ssm:/${self:service}/SLACK_SIGNING_SECRET~true}
   fines:
     handler: fines.handle
     description: List all user fines
@@ -29,14 +42,14 @@ functions:
           path: fines
           method: post
     environment:
-      SLACK_SIGNING_SECRET: ${ssm:/fined/SLACK_SIGNING_SECRET~true}
+      SLACK_SIGNING_SECRET: ${ssm:/${self:service}/SLACK_SIGNING_SECRET~true}
 
 resources:
   Resources:
     finesTable: 
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: fines-${opt:stage}
+        TableName: ${self:provider.environment.DYNAMODB_TABLE}
         AttributeDefinitions:
           - AttributeName: teamId
             AttributeType: S
