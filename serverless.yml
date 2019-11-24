@@ -8,7 +8,9 @@ provider:
   region: us-east-1
   apiName: fined
   memorySize: 512
-
+  stackTags:
+    PROJECT: fined
+    
 functions:
   fine:
     handler: fine.handle
@@ -28,4 +30,20 @@ functions:
           method: post
     environment:
       SLACK_SIGNING_SECRET: ${ssm:/fined/SLACK_SIGNING_SECRET~true}
-      
+
+resources:
+  Resources:
+    finesTable: 
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: fines
+        AttributeDefinitions:
+          - AttributeName: teamId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: teamId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        
