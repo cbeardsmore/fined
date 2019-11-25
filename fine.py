@@ -1,13 +1,12 @@
-import boto3
 import json
 import os
-
 from urllib.parse import parse_qs
-from auth import isVerifiedRequest
+import boto3
+from auth import is_verified_request
 
-def handle(event, context):
-    if not isVerifiedRequest(event):
-        return { 'statusCode': 401 }
+def handle(event, _):
+    if not is_verified_request(event):
+        return {'statusCode': 401}
 
     params = parse_qs(event['body'])
     text = params['text'][0]
@@ -19,27 +18,27 @@ def handle(event, context):
     print('Team ID -> ', team_id)
 
     dynamodb = boto3.client('dynamodb')
-    tableName = os.environ['DYNAMODB_TABLE']
+    table_name = os.environ['DYNAMODB_TABLE']
     dynamodb.put_item(
-        TableName=tableName,
-        Item={ 
-            'teamId': { 'S': team_id }, 
-            'teamFines': { 'M': 
-                { 'username': { 'S': user_name,}, 'text': {'S': text} }
+        TableName=table_name,
+        Item={
+            'teamId': {'S': team_id},
+            'teamFines': {'M':
+                {'username': {'S': user_name,}, 'text': {'S': text}}
             }
         }
     )
-        
+
     return {
         "statusCode": 200,
-        "body": json.dumps(generateResponseBody(user_name)),
+        "body": json.dumps(generate_response_body(user_name)),
         "headers": {
             "Content-Type": "application/json"
         }
     }
 
 
-def generateResponseBody(user_name):
+def generate_response_body(user_name):
     return  {
         "response_type": "in_channel",
         "blocks": [
