@@ -1,6 +1,6 @@
 import boto3
-import os
 import json
+import os
 
 from urllib.parse import parse_qs
 from auth import isVerifiedRequest
@@ -41,6 +41,7 @@ def handle(event, context):
 
 def generateResponseBody(user_name):
     return  {
+        "response_type": "in_channel",
         "blocks": [
             {
                 "type": "section",
