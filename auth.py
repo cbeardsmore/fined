@@ -7,7 +7,7 @@ HEADER_SLACK_TIMESTAMP = 'X-Slack-Request-Timestamp'
 HEADER_SLACK_SIGNATURE = 'X-Slack-Signature'
 BYTES_ENCODING = 'latin-1'
 
-def isVerifiedRequest(event):
+def is_verified_request(event):
     slack_signing_secret = os.environ['SLACK_SIGNING_SECRET']
     signature = event['headers'][HEADER_SLACK_SIGNATURE]
     timestamp = event['headers'][HEADER_SLACK_TIMESTAMP]
@@ -19,8 +19,8 @@ def isVerifiedRequest(event):
     calculated_basestring = 'v0:{}:{}'.format(timestamp, event['body'])
     calculated_signature = 'v0=' + hmac.new(
         bytes(slack_signing_secret, BYTES_ENCODING),
-        msg = bytes(calculated_basestring, BYTES_ENCODING),
-        digestmod = hashlib.sha256
+        msg=bytes(calculated_basestring, BYTES_ENCODING),
+        digestmod=hashlib.sha256
     ).hexdigest()
 
     if not hmac.compare_digest(signature, calculated_signature):
