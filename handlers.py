@@ -1,3 +1,14 @@
+import json
+
+def wrap_response_body(response_body):
+    return {
+        "statusCode": 200,
+        "body": json.dumps(response_body),
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+
 def handle_help_request():
     return  {
         "response_type": "ephermeral",
