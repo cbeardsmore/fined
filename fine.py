@@ -1,15 +1,38 @@
 import json
 import os
+import re
 from urllib.parse import parse_qs
 import boto3
 from auth import is_verified_request
+import handlers
+
+HELP_REGEX = 'help'
+FINE_REGEX = r'@.*\$.*for.*'
 
 def handle(event, _):
     if not is_verified_request(event):
         return {'statusCode': 401}
 
     params = parse_qs(event['body'])
-    text = params['text'][0]
+    text = params['text'][0].strip()
+
+    if re.match(HELP_REGEX, text):
+        response_body = handlers.handle_help_request()
+    elif re.match(FINE_REGEX, text):
+        response_body = handle_fine_request(params)
+    else:
+        response_body = handlers.handle_fallback()
+
+    return {
+        "statusCode": 200,
+        "body": json.dumps(response_body),
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
+
+def handle_fine_request(params):
+    text = params['text'][0].strip()
     user_name = params['user_name'][0]
     team_id = params['team_id'][0]
 
@@ -29,14 +52,7 @@ def handle(event, _):
         }
     )
 
-    return {
-        "statusCode": 200,
-        "body": json.dumps(generate_response_body(user_name)),
-        "headers": {
-            "Content-Type": "application/json"
-        }
-    }
-
+    return generate_response_body(user_name)
 
 def generate_response_body(user_name):
     return  {
