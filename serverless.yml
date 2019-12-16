@@ -26,7 +26,7 @@ provider:
 
 functions:
   fine:
-    handler: src/fine.handle
+    handler: fine.handle
     description: Fine a user a given amount.
     events:
       - http:
@@ -35,7 +35,7 @@ functions:
     environment:
       SLACK_SIGNING_SECRET: ${ssm:/${self:service}/SLACK_SIGNING_SECRET~true}
   fines:
-    handler: src/fines.handle
+    handler: fines.handle
     description: List all user fines
     events:
       - http:
