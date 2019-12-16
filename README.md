@@ -39,3 +39,13 @@ Slack Bot for managing Team Fines running on the Serverless framework
 - Run lambda function locally with JSON event payload:
 
     `serverless invoke local --function fine --path event.json`
+
+### Testing
+
+- Install Dependencies:
+
+    `pip3 install -r requirements.txt`
+
+- Run Tests:
+ 
+     `SLACK_SIGNING_SECRET=123 python3 -m pytest`
