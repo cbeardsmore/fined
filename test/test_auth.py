@@ -1,5 +1,4 @@
 import auth
-import fine
 import json
 import time
 import pytest
@@ -19,8 +18,7 @@ def test_is_verified_request_for_valid_request(event):
     event['headers'][HEADER_SLACK_SIGNATURE] = signature
     event['headers'][HEADER_SLACK_TIMESTAMP] = timestamp
 
-    result = fine.handle(event, {})
-    assert result['statusCode'] == 200
+    assert auth.is_verified_request(event)
 
 def test_is_verified_request_for_expired_request(event):
     timestamp = time.time() - 60 * 6
@@ -28,8 +26,7 @@ def test_is_verified_request_for_expired_request(event):
     event['headers'][HEADER_SLACK_SIGNATURE] = signature
     event['headers'][HEADER_SLACK_TIMESTAMP] = timestamp
 
-    result = fine.handle(event, {})
-    assert result['statusCode'] == 401
+    assert not auth.is_verified_request(event)
 
 def test_is_verified_request_for_invalid_secret(event):
     timestamp = time.time() - 60 * 6
@@ -37,5 +34,4 @@ def test_is_verified_request_for_invalid_secret(event):
     event['headers'][HEADER_SLACK_SIGNATURE] = signature
     event['headers'][HEADER_SLACK_TIMESTAMP] = timestamp
 
-    result = fine.handle(event, {})
-    assert result['statusCode'] == 401
+    assert not auth.is_verified_request(event)

@@ -9,9 +9,7 @@
       "Content-Type": "application/x-www-form-urlencoded",
       "User-Agent": "Slackbot 1.0 (+https://api.slack.com/robots)",
       "X-Forwarded-Port": "443",
-      "X-Forwarded-Proto": "https",
-      "X-Slack-Request-Timestamp": "1576997080",
-      "X-Slack-Signature": "v0=0c625a09dbba8150f0f2394ae1341d024ed7c4324093f43592ca3fd26ed4f96f"
+      "X-Forwarded-Proto": "https"
     },
     "multiValueHeaders": {
       "Accept": [
