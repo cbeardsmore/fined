@@ -1,4 +1,3 @@
-import json
 import os
 import re
 from urllib.parse import parse_qs
@@ -8,7 +7,6 @@ import handlers
 
 HELP_REGEX = r'help'
 FINE_REGEX = r'@.*\$.*for.*'
-
 
 def handle(event, _):
     if not is_verified_request(event):
@@ -44,19 +42,4 @@ def handle_fine_request(params):
         }
     )
 
-    return generate_response_body(user_name)
-
-
-def generate_response_body(user_name):
-    return {
-        "response_type": "in_channel",
-        "blocks": [
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "@{} has been fined. Shame on them!".format(user_name)
-                }
-            }
-        ]
-    }
+    return handlers.handle_fine_response(user_name)

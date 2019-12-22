@@ -48,4 +48,4 @@ Slack Bot for managing Team Fines running on the Serverless framework
 
 - Run Tests:
  
-     `SLACK_SIGNING_SECRET=123 python3 -m pytest`
+     `./test/test.sh`
