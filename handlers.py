@@ -36,4 +36,17 @@ def handle_fallback():
             }
         ]
     }
-    
+
+def handle_fine_response(user_name):
+    return {
+        "response_type": "in_channel",
+        "blocks": [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "@{} has been fined. Shame on them!".format(user_name)
+                }
+            }
+        ]
+    }
