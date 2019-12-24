@@ -9,7 +9,7 @@ def wrap_response_body(response_body):
         }
     }
 
-def handle_help_request():
+def create_help_response():
     return  {
         "response_type": "ephermeral",
         "blocks": [
@@ -23,7 +23,7 @@ def handle_help_request():
         ]
     }
 
-def handle_fallback():
+def create_fallback_response():
     return  {
         "response_type": "ephermeral",
         "blocks": [
@@ -37,7 +37,7 @@ def handle_fallback():
         ]
     }
 
-def handle_fine_response(user_name):
+def create_fine_response(user_name):
     return {
         "response_type": "in_channel",
         "blocks": [
@@ -46,6 +46,20 @@ def handle_fine_response(user_name):
                 "text": {
                     "type": "mrkdwn",
                     "text": "@{} has been fined. Shame on them!".format(user_name)
+                }
+            }
+        ]
+    }
+
+def create_fines_response(team_fines):
+    return  {
+        "response_type": "in_channel",
+        "blocks": [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Current Team Fines: {}".format(team_fines)
                 }
             }
         ]
