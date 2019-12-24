@@ -3,7 +3,7 @@ import re
 from urllib.parse import parse_qs
 import boto3
 from auth import is_verified_request
-import handlers
+import response
 
 HELP_REGEX = r'help'
 FINE_REGEX = r'@.*\$.*for.*'
@@ -16,13 +16,13 @@ def handle(event, _):
     text = params.get('text', 'help')[0].strip()
 
     if re.match(HELP_REGEX, text):
-        response_body = handlers.handle_help_request()
+        response_body = response.create_help_response()
     elif re.match(FINE_REGEX, text):
         response_body = handle_fine_request(params)
     else:
-        response_body = handlers.handle_fallback()
+        response_body = response.create_fallback_response()
 
-    return handlers.wrap_response_body(response_body)
+    return response.wrap_response_body(response_body)
 
 
 def handle_fine_request(params):
@@ -37,9 +37,9 @@ def handle_fine_request(params):
         Key={'teamId': {'S': team_id}},
         UpdateExpression='SET teamFines = list_append(if_not_exists(teamFines, :emptyList), :fine)',
         ExpressionAttributeValues={
-            ':fine': {'L': [{'M': {'finedBy': {'S': user_name}, 'text': {'S': text}}}]},
-            ':emptyList': {'L':[]}
+            ':emptyList': {'L':[]},
+            ':fine': {'L': [{'M': {'finedBy': {'S': user_name}, 'text': {'S': text}}}]}
         }
     )
 
-    return handlers.handle_fine_response(user_name)
+    return response.create_fine_response(user_name)

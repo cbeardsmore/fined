@@ -2,13 +2,15 @@ import auth
 import json
 import time
 import pytest
+import os
 
 SIGNING_SECRET = 'fake_secret'
 HEADER_SLACK_TIMESTAMP = 'X-Slack-Request-Timestamp'
 HEADER_SLACK_SIGNATURE = 'X-Slack-Signature'
 
-@pytest.fixture(scope="session")
-def event():
+@pytest.fixture(scope="function")
+def event(monkeypatch):
+    monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', 'fake_secret')
     with open('local/fine.json') as file:
         return json.load(file)
 
@@ -29,7 +31,7 @@ def test_is_verified_request_for_expired_request(event):
     assert not auth.is_verified_request(event)
 
 def test_is_verified_request_for_invalid_secret(event):
-    timestamp = time.time() - 60 * 6
+    timestamp = time.time()
     signature = auth.generate_signature('this_secret_is_wrong', timestamp, event['body'])
     event['headers'][HEADER_SLACK_SIGNATURE] = signature
     event['headers'][HEADER_SLACK_TIMESTAMP] = timestamp
