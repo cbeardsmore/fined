@@ -37,8 +37,8 @@ def handle_fine_request(params):
         Key={'teamId': {'S': team_id}},
         UpdateExpression='SET teamFines = list_append(if_not_exists(teamFines, :emptyList), :fine)',
         ExpressionAttributeValues={
-            ':fine': {'L': [{'M': {'finedBy': {'S': user_name}, 'text': {'S': text}}}]},
-            ':emptyList': {'L':[]}
+            ':emptyList': {'L':[]},
+            ':fine': {'L': [{'M': {'finedBy': {'S': user_name}, 'text': {'S': text}}}]}
         }
     )
 

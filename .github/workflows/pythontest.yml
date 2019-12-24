@@ -19,4 +19,4 @@ jobs:
         pip install -r requirements.txt
     - name: Test with PyTest
       run: |
-        SLACK_SIGNING_SECRET=fake_secret python3 -m pytest
+        python3 -m pytest

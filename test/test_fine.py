@@ -2,17 +2,23 @@ from urllib.parse import parse_qs
 from urllib.parse import urlencode
 import json
 import time
+import os
 import pytest
 import auth
 import fine
-import handlers
+import response
 
 SIGNING_SECRET = 'fake_secret'
 HEADER_SLACK_TIMESTAMP = 'X-Slack-Request-Timestamp'
 HEADER_SLACK_SIGNATURE = 'X-Slack-Signature'
 
 @pytest.fixture(scope="function")
-def event():
+def mock_os(monkeypatch):
+    monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', 'fake_secret')
+    monkeypatch.setitem(os.environ, 'DYNAMDB_TABLE', 'table_name')
+
+@pytest.fixture(scope="function")
+def event(mock_os):
     event_payload = []
     with open('local/fine.json') as file:
         event_payload = json.load(file)
@@ -32,13 +38,13 @@ def test_handle_with_no_text_returns_fallback(event):
     event['body'] = set_body_text(event['body'], 'invalid_text')
     event = update_signature(event)
     result = fine.handle(event, {})
-    assert result['body'] == json.dumps(handlers.handle_fallback())
+    assert result['body'] == json.dumps(response.create_fallback_response())
 
 def test_handle_with_help_text_returns_help(event):
     event['body'] = set_body_text(event['body'], 'help')
     event = update_signature(event)
     result = fine.handle(event, {})
-    assert result['body'] == json.dumps(handlers.handle_help_request())
+    assert result['body'] == json.dumps(response.create_help_response())
 
 
 # HELPER METHODS

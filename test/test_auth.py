@@ -2,13 +2,15 @@ import auth
 import json
 import time
 import pytest
+import os
 
 SIGNING_SECRET = 'fake_secret'
 HEADER_SLACK_TIMESTAMP = 'X-Slack-Request-Timestamp'
 HEADER_SLACK_SIGNATURE = 'X-Slack-Signature'
 
-@pytest.fixture(scope="session")
-def event():
+@pytest.fixture(scope="function")
+def event(monkeypatch):
+    monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', 'fake_secret')
     with open('local/fine.json') as file:
         return json.load(file)
 
