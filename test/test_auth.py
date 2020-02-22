@@ -1,8 +1,8 @@
-import auth
 import json
 import time
-import pytest
 import os
+import pytest
+import auth
 
 SIGNING_SECRET = 'fake_secret'
 HEADER_SLACK_TIMESTAMP = 'X-Slack-Request-Timestamp'
