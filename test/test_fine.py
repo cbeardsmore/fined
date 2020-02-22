@@ -15,7 +15,7 @@ HEADER_SLACK_SIGNATURE = 'X-Slack-Signature'
 @pytest.fixture(scope="function")
 def mock_os(monkeypatch):
     monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', 'fake_secret')
-    monkeypatch.setitem(os.environ, 'DYNAMDB_TABLE', 'table_name')
+    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE', 'table_name')
 
 @pytest.fixture(scope="function")
 def event(mock_os):
