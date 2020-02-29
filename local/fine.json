@@ -6,6 +6,6 @@
       "X-Slack-Signature": "v0=e157fce587b5434d07463583c49b0cb0df097280c4abde8a629dda9e3ddd6798",
       "X-Slack-Request-Timestamp": "1582354237"
     },
-    "body": "token=PLAZDD9GlbmE9Ard7vo1td72&team_id=TQPJASJUD&team_domain=cbeardsmore&channel_id=DQFL9F0GH&channel_name=directmessage&user_id=UQPJ3CFG8&user_name=connor.beardsmore&command=%2Ffine&text=no&response_url=https%3A%2F%2Fhooks.slack.com%2Fcommands%2FTQPJASJUD%2F848397789159%2F2ZQ6lroVdI6rPARbAgdpIGHw&trigger_id=838611962625.839622902965.64f1f6eb51f0f7731ceec2b59a3388cb",
+    "body": "token=PLAZDD9GlbmE9Ard7vo1td72&team_id=fake_team_id&team_domain=cbeardsmore&channel_id=DQFL9F0GH&channel_name=directmessage&user_id=UQPJ3CFG8&user_name=user1&command=%2Ffine&text=no&response_url=https%3A%2F%2Fhooks.slack.com%2Fcommands%2FTQPJASJUD%2F848397789159%2F2ZQ6lroVdI6rPARbAgdpIGHw&trigger_id=838611962625.839622902965.64f1f6eb51f0f7731ceec2b59a3388cb",
     "isBase64Encoded": false
   }
