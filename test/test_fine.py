@@ -83,7 +83,7 @@ def set_body_text(body, text):
 
 
 def create_dynamo_table():
-    boto3.client('dynamodb').create_table(
+    boto3.client('dynamodb', region_name='us-east-1').create_table(
         TableName='table_name',
         KeySchema=[{
             'AttributeName': 'teamId',
