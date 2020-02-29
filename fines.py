@@ -11,7 +11,7 @@ def handle(event, _):
     params = parse_qs(event['body'])
     team_id = params['team_id'][0]
 
-    dynamodb = boto3.client('dynamodb')
+    dynamodb = boto3.client('dynamodb', region_name='us-east-1')
     table_name = os.environ['DYNAMODB_TABLE']
     dynamo_response = dynamodb.get_item(
         TableName=table_name,

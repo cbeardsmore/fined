@@ -30,7 +30,7 @@ def handle_fine_request(params):
     user_name = params['user_name'][0]
     team_id = params['team_id'][0]
 
-    dynamodb = boto3.client('dynamodb')
+    dynamodb = boto3.client('dynamodb', region_name='us-east-1')
     table_name = os.environ['DYNAMODB_TABLE']
     dynamodb.update_item(
         TableName=table_name,
