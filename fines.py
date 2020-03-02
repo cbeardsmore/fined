@@ -1,6 +1,7 @@
 import os
 from urllib.parse import parse_qs
 import boto3
+from boto3.dynamodb.types import TypeDeserializer
 from auth import is_verified_request
 import response
 
@@ -18,6 +19,14 @@ def handle(event, _):
         Key={'teamId': {'S': team_id}}
     )
 
+    if (dynamo_response.get('Item') is None or dynamo_response['Item']['teamFines'] is None):
+        return response.create_no_fines_response()
+
     team_fines = dynamo_response['Item']['teamFines']
-    body = response.create_fines_response(team_fines)
+    team_fines_deserialized = from_dynamodb_to_json(team_fines)
+    body = response.create_fines_response(team_fines_deserialized)
     return response.wrap_response_body(body)
+
+def from_dynamodb_to_json(item):
+    d = TypeDeserializer()
+    return d.deserialize(item)

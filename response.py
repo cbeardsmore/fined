@@ -37,6 +37,20 @@ def create_fallback_response():
         ]
     }
 
+def create_no_fines_response():
+    return  {
+        "response_type": "ephermeral",
+        "blocks": [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "There are no fines for this channel! Use the /fine command to fine a teammate."
+                }
+            }
+        ]
+    }
+
 def create_fine_response(user_name):
     return {
         "response_type": "in_channel",
