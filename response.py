@@ -73,7 +73,7 @@ def create_fines_response(team_fines):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "Current Team Fines: {}".format(team_fines)
+                    "text": "\U0001F4B0 *Current Team Fines:* \U0001F4B0\n \u2022{}".format(team_fines)
                 }
             }
         ]
