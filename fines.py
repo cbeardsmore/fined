@@ -29,4 +29,7 @@ def handle(event, _):
 
 def from_dynamodb_to_json(item):
     d = TypeDeserializer()
-    return d.deserialize(item)
+    items = d.deserialize(item)
+    items = [x['text'] for x in items]
+    items = "\n \u2022 ".join(items)
+    return items
