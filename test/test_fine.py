@@ -1,24 +1,17 @@
-from urllib.parse import parse_qs
-from urllib.parse import urlencode
 import json
-import time
 import os
 from moto import mock_dynamodb2
 import pytest
-import boto3
-import auth
 import fine
 import response
-
-SIGNING_SECRET = 'fake_secret'
-HEADER_SLACK_TIMESTAMP = 'X-Slack-Request-Timestamp'
-HEADER_SLACK_SIGNATURE = 'X-Slack-Signature'
-
+import dynamo
+import utils
+import const
 
 @pytest.fixture(scope="function")
 def mock_os(monkeypatch):
-    monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', 'fake_secret')
-    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE', 'table_name')
+    monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', const.SIGNING_SECRET)
+    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE', const.DYNAMO_DB_TABLE)
 
 
 @pytest.fixture(scope="function")
@@ -26,11 +19,11 @@ def event(mock_os):
     event_payload = []
     with open('local/fine.json') as file:
         event_payload = json.load(file)
-    return update_signature(event_payload)
+    return utils.update_signature(event_payload)
 
 
 def test_handle_with_unverified_request_returns_401(event):
-    event['headers'][HEADER_SLACK_SIGNATURE] = 'invalid'
+    event['headers'][const.HEADER_SLACK_SIGNATURE] = 'invalid'
     result = fine.handle(event, {})
     assert result['statusCode'] == 401
 
@@ -42,57 +35,36 @@ def test_handle_sets_headers_and_status_code(event):
 
 
 def test_handle_with_no_text_returns_fallback(event):
-    event['body'] = set_body_text(event['body'], 'invalid_text')
-    event = update_signature(event)
+    event['body'] = utils.set_body_text(event['body'], 'invalid_text')
+    event = utils.update_signature(event)
     result = fine.handle(event, {})
     assert result['body'] == json.dumps(response.create_fallback_response())
 
 
 def test_handle_with_help_text_returns_help(event):
-    event['body'] = set_body_text(event['body'], 'help')
-    event = update_signature(event)
+    event['body'] = utils.set_body_text(event['body'], 'help')
+    event = utils.update_signature(event)
     result = fine.handle(event, {})
     assert result['body'] == json.dumps(response.create_help_response())
 
 
 @mock_dynamodb2
-def test_handle_with_fine_text_returns_valid_respone(event):
-    event['body'] = set_body_text(event['body'], '@fake_user_2 $50 for reason')
-    event = update_signature(event)
-    create_dynamo_table()
+def test_handle_with_fine_text_returns_valid_response(event):
+    event['body'] = utils.set_body_text(event['body'], '@fake_user_2 $50 for reason')
+    event = utils.update_signature(event)
+    dynamo.create_table()
     result = fine.handle(event, {})
-    assert result['body'] == json.dumps(response.create_fine_response('fake_user'))
+    assert result['body'] == json.dumps(response.create_fine_response(const.USERNAME))
 
 
-# HELPER METHODS
-def update_signature(event):
-    timestamp = time.time()
-    signature = auth.generate_signature(
-        SIGNING_SECRET, timestamp, event['body'])
-    event['headers'][HEADER_SLACK_SIGNATURE] = signature
-    event['headers'][HEADER_SLACK_TIMESTAMP] = timestamp
-    return event
-
-
-def set_body_text(body, text):
-    params = parse_qs(body)
-    params['text'] = text
-    params['user_name'] = 'fake_user'
-    params['team_id'] = 'fake_team_id'
-    return urlencode(params)
-
-
-def create_dynamo_table():
-    boto3.client('dynamodb', region_name='us-east-1').create_table(
-        TableName='table_name',
-        KeySchema=[{
-            'AttributeName': 'teamId',
-            'KeyType': 'HASH'
-        }],
-        AttributeDefinitions=[
-            {
-                'AttributeName': 'teamId',
-                'AttributeType': 'S'
-            }
-        ],
-    )
+@mock_dynamodb2
+def test_handle_with_fine_text_saves_dynamo_item(event):
+    text = '@fake_user_2 $50 for reason'
+    event['body'] = utils.set_body_text(event['body'], text)
+    event = utils.update_signature(event)
+    dynamo.create_table()
+    fine.handle(event, {})
+    fine_item = dynamo.get_item(const.TEAM_ID)[0]
+    assert fine_item['finedBy'] == const.USERNAME
+    assert fine_item['text'] == text
+    

@@ -1,21 +1,17 @@
-from urllib.parse import parse_qs
-from urllib.parse import urlencode
 import json
-import time
 import os
+from moto import mock_dynamodb2
 import pytest
-import auth
+import response
 import fines
-
-SIGNING_SECRET = 'fake_secret'
-HEADER_SLACK_TIMESTAMP = 'X-Slack-Request-Timestamp'
-HEADER_SLACK_SIGNATURE = 'X-Slack-Signature'
-
+import utils
+import const
+import dynamo
 
 @pytest.fixture(scope="function")
 def mock_os(monkeypatch):
-    monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', 'fake_secret')
-    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE', 'table_name')
+    monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', const.SIGNING_SECRET)
+    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE', const.DYNAMO_DB_TABLE)
 
 
 @pytest.fixture(scope="function")
@@ -23,27 +19,30 @@ def event(mock_os):
     event_payload = []
     with open('local/fines.json') as file:
         event_payload = json.load(file)
-    return update_signature(event_payload)
+    return utils.update_signature(event_payload)
 
 
 def test_handle_with_unverified_request_returns_401(event):
-    event['headers'][HEADER_SLACK_SIGNATURE] = 'invalid'
+    event['headers'][const.HEADER_SLACK_SIGNATURE] = 'invalid'
     result = fines.handle(event, {})
     assert result['statusCode'] == 401
 
 
-def update_signature(event):
-    timestamp = time.time()
-    signature = auth.generate_signature(
-        SIGNING_SECRET, timestamp, event['body'])
-    event['headers'][HEADER_SLACK_SIGNATURE] = signature
-    event['headers'][HEADER_SLACK_TIMESTAMP] = timestamp
-    return event
+@mock_dynamodb2
+def test_handle_with_fines_returns_fines_list(event):
+    event = utils.update_signature(event)
+    dynamo.create_table()
+    result = fines.handle(event, {})
+    assert result['body'] == json.dumps(response.create_no_fines_response())
 
 
-def set_body_text(body, text):
-    params = parse_qs(body)
-    params['text'] = text
-    params['user_name'] = 'fake_user'
-    params['team_id'] = 'fake_team_id'
-    return urlencode(params)
+@mock_dynamodb2
+def test_handle_with_fine_text_returns_valid_response(event):
+    text = '@fake_user_2 $50 for reason'
+    event['body'] = utils.set_body_text(event['body'], '')
+    event = utils.update_signature(event)
+    dynamo.create_table()
+    dynamo.update_item(const.TEAM_ID, const.USERNAME, text)
+    result = fines.handle(event, {})
+    assert result['body'] == json.dumps(response.create_fines_response(text))
+    

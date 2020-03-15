@@ -12,7 +12,8 @@ def handle(event, _):
     team_fines = dynamo.get_item(team_id)
 
     if team_fines is None:
-        return response.create_no_fines_response()
+        body = response.create_no_fines_response()
+        return response.wrap_response_body(body)
 
     team_fines_formatted = format_team_fines(team_fines)
     body = response.create_fines_response(team_fines_formatted)
