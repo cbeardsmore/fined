@@ -1,14 +1,14 @@
 import re
 from urllib.parse import parse_qs
-from auth import is_verified_request
-from dynamo import update_item
+import auth
 import response
+import dynamo
 
 HELP_REGEX = r'help'
 FINE_REGEX = r'@.*\$.*for.*'
 
 def handle(event, _):
-    if not is_verified_request(event):
+    if not auth.is_verified_request(event):
         return {'statusCode': 401}
 
     params = parse_qs(event['body'])
@@ -29,5 +29,6 @@ def handle_fine_request(params):
     user_name = params['user_name'][0]
     team_id = params['team_id'][0]
 
-    update_item(team_id, user_name, text)
+    dynamo.update_item(team_id, user_name, text)
     return response.create_fine_response(user_name)
+    
