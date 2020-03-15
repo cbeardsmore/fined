@@ -1,8 +1,7 @@
-import os
 from urllib.parse import parse_qs
-import boto3
 from boto3.dynamodb.types import TypeDeserializer
 from auth import is_verified_request
+from dynamo import get_item
 import response
 
 def handle(event, _):
@@ -11,13 +10,7 @@ def handle(event, _):
 
     params = parse_qs(event['body'])
     team_id = params['team_id'][0]
-
-    dynamodb = boto3.client('dynamodb', region_name='us-east-1')
-    table_name = os.environ['DYNAMODB_TABLE']
-    dynamo_response = dynamodb.get_item(
-        TableName=table_name,
-        Key={'teamId': {'S': team_id}}
-    )
+    dynamo_response = get_item(team_id)
 
     if (dynamo_response.get('Item') is None or dynamo_response['Item']['teamFines'] is None):
         return response.create_no_fines_response()

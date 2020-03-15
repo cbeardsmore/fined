@@ -1,8 +1,7 @@
-import os
 import re
 from urllib.parse import parse_qs
-import boto3
 from auth import is_verified_request
+from dynamo import update_item
 import response
 
 HELP_REGEX = r'help'
@@ -30,16 +29,5 @@ def handle_fine_request(params):
     user_name = params['user_name'][0]
     team_id = params['team_id'][0]
 
-    dynamodb = boto3.client('dynamodb', region_name='us-east-1')
-    table_name = os.environ['DYNAMODB_TABLE']
-    dynamodb.update_item(
-        TableName=table_name,
-        Key={'teamId': {'S': team_id}},
-        UpdateExpression='SET teamFines = list_append(if_not_exists(teamFines, :emptyList), :fine)',
-        ExpressionAttributeValues={
-            ':emptyList': {'L':[]},
-            ':fine': {'L': [{'M': {'finedBy': {'S': user_name}, 'text': {'S': text}}}]}
-        }
-    )
-
+    update_item(team_id, user_name, text)
     return response.create_fine_response(user_name)
