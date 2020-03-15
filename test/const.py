@@ -1,0 +1,6 @@
+SIGNING_SECRET = 'fake_secret'
+DYNAMO_DB_TABLE = 'table_name'
+TEAM_ID = 'fake_team_id'
+USERNAME = 'fake_user'
+HEADER_SLACK_TIMESTAMP = 'X-Slack-Request-Timestamp'
+HEADER_SLACK_SIGNATURE = 'X-Slack-Signature'
