@@ -1,5 +1,6 @@
 import json
 
+
 def wrap_response_body(response_body):
     return {
         "statusCode": 200,
@@ -9,22 +10,9 @@ def wrap_response_body(response_body):
         }
     }
 
-def create_help_response():
-    return  {
-        "response_type": "ephermeral",
-        "blocks": [
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "/fine user $amount for ...."
-                }
-            }
-        ]
-    }
 
 def create_fallback_response():
-    return  {
+    return {
         "response_type": "ephermeral",
         "blocks": [
             {
@@ -37,8 +25,9 @@ def create_fallback_response():
         ]
     }
 
+
 def create_no_fines_response():
-    return  {
+    return {
         "response_type": "ephermeral",
         "blocks": [
             {
@@ -50,6 +39,7 @@ def create_no_fines_response():
             }
         ]
     }
+
 
 def create_fine_response(user_name):
     return {
@@ -65,8 +55,9 @@ def create_fine_response(user_name):
         ]
     }
 
+
 def create_fines_response(team_fines):
-    return  {
+    return {
         "response_type": "in_channel",
         "blocks": [
             {
@@ -75,6 +66,63 @@ def create_fines_response(team_fines):
                     "type": "mrkdwn",
                     "text": "\U0001F4B0 *Current Team Fines:* \U0001F4B0\n \u2022{}".format(team_fines)
                 }
+            }
+        ]
+    }
+
+
+def create_help_response():
+    return {
+        "response_type": "ephermeral",
+        "blocks": [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "Hey there 👋 I'm FinedBot and I'm here to help. 🤖"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*1️⃣ Use the `/fine` command*. 🤔 Someone on your team deserves a fine? Type `/fine` followed by the victims alias, the cost and the reason. Here's some examples:\n • `/fine @Tim $5 for messing up the CSS...again`\n• `/fine @Sam $10 for wearing Activewear after 9am`\n• `/fine Jack $10 for being late to standup for the 5th time this week`\n\n Make sure you always follow the required format of: \n • `/fine @user $cost for reason`"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*2️⃣ Use the `/fines` command.* 👮‍♀️ Get a list of your teams biggest offenders and who needs to pay up. They'll be prompted to remind them of their outstanding fines:"
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "*3️⃣ Pay up!* 💰Users can mark their fines as paid. Shout a teammate a coffee, pay for the next group lunch, or donate to your favourite charity. It's up to you to keep people honest. Here's a few of our favourite:\n• http://www.americanhumane.org/\n• https://www.hopeforthewarriors.org/\n• https://www.beyondblue.org.au/ "
+                }
+            },
+            {
+                "type": "divider"
+            },
+            {
+                "type": "context",
+                "elements": [
+                    {
+                        "type": "mrkdwn",
+                        "text": " 💻Check out the code at https://github.com/cbeardsmore/fined\n ❓Get help at any time with `/fine help\n"
+                    }
+                ]
             }
         ]
     }
