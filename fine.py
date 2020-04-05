@@ -17,15 +17,14 @@ def handle(event, _):
     if re.match(HELP_REGEX, text):
         response_body = response.create_help_response()
     elif re.match(FINE_REGEX, text):
-        response_body = handle_fine_request(params)
+        response_body = handle_fine_request(params, text)
     else:
         response_body = response.create_fallback_response()
 
     return response.wrap_response_body(response_body)
 
 
-def handle_fine_request(params):
-    text = params['text'][0].strip()
+def handle_fine_request(params, text):
     user_name = params['user_name'][0]
     team_id = params['team_id'][0]
 
