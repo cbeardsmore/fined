@@ -28,6 +28,13 @@ def test_handle_with_unverified_request_returns_401(event):
     assert result['statusCode'] == 401
 
 
+def test_handle_with_help_text_returns_help(event):
+    event['body'] = utils.set_body_text(event['body'], 'help')
+    event = utils.update_signature(event)
+    result = fines.handle(event, {})
+    assert result['body'] == json.dumps(response.create_help_response())
+
+
 @mock_dynamodb2
 def test_handle_with_fines_returns_fines_list(event):
     event = utils.update_signature(event)
