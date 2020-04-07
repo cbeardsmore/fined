@@ -50,11 +50,12 @@ def test_handle_with_help_text_returns_help(event):
 
 @mock_dynamodb2
 def test_handle_with_fine_text_returns_valid_response(event):
-    event['body'] = utils.set_body_text(event['body'], '@fake_user_2 $50 for reason')
+    body_text = '@{} $50 for reason'.format(const.USERNAME_FINED)
+    event['body'] = utils.set_body_text(event['body'], body_text)
     event = utils.update_signature(event)
     dynamo.create_table()
     result = fine.handle(event, {})
-    assert result['body'] == json.dumps(response.create_fine_response(const.USERNAME))
+    assert result['body'] == json.dumps(response.create_fine_response(const.USERNAME_FINED))
 
 
 @mock_dynamodb2

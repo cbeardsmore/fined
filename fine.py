@@ -5,7 +5,7 @@ import response
 import dynamo
 
 HELP_REGEX = r'help'
-FINE_REGEX = r'@.*\$.*for.*'
+FINE_REGEX = r'@(.*)\$.*for.*'
 
 def handle(event, _):
     if not auth.is_verified_request(event):
@@ -27,7 +27,8 @@ def handle(event, _):
 def handle_fine_request(params, text):
     user_name = params['user_name'][0]
     team_id = params['team_id'][0]
+    user_name_fined = re.search(FINE_REGEX, text).group(1).strip()
 
     dynamo.update_item(team_id, user_name, text)
-    return response.create_fine_response(user_name)
+    return response.create_fine_response(user_name_fined)
     
