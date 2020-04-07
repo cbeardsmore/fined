@@ -33,6 +33,4 @@ def handle_fines_request(params):
 
 
 def format_team_fines(fines):
-    fines = [x['text'] for x in fines]
-    fines = "\n \u2022 ".join(fines)
-    return fines
+    return [x['text'] for x in fines]

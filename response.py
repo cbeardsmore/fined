@@ -57,18 +57,52 @@ def create_fine_response(user_name):
 
 
 def create_fines_response(team_fines):
-    return {
+    response_template = {
         "response_type": "in_channel",
         "blocks": [
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "\U0001F4B0 *Current Team Fines:* \U0001F4B0\n \u2022{}".format(team_fines)
+                    "text": "\U0001F4B0 *Current Team Fines:* \U0001F4B0"
                 }
+            },
+            {
+                "type": "divider"
             }
         ]
     }
+
+    for fine in team_fines:
+        response_template['blocks'].append(
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "\u2022 {} ".format(fine)
+                },
+                "accessory": {
+                    "type": "button",
+                    "style": "primary",
+                    "text": {
+                        "type": "plain_text",
+                        "text": "Pay",
+                        "emoji": True
+                    },
+                    "value": "Pay"
+                }
+            }
+        )
+
+    response_template['blocks'].append(
+        {
+            "type": "divider"
+        }
+    )
+
+    print(response_template['blocks'])
+
+    return response_template
 
 
 def create_help_response():
