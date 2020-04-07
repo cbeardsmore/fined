@@ -51,5 +51,5 @@ def test_handle_with_fine_text_returns_valid_response(event):
     dynamo.create_table()
     dynamo.update_item(const.TEAM_ID, const.USERNAME, text)
     result = fines.handle(event, {})
-    assert result['body'] == json.dumps(response.create_fines_response(text))
+    assert result['body'] == json.dumps(response.create_fines_response([text]))
     
