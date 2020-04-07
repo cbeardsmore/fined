@@ -28,9 +28,5 @@ def handle_fines_request(params):
     if team_fines is None:
         return response.create_no_fines_response()
 
-    team_fines_formatted = format_team_fines(team_fines)
-    return response.create_fines_response(team_fines_formatted)
-
-
-def format_team_fines(fines):
-    return [x['text'] for x in fines]
+    team_fines_text = [x['text'] for x in team_fines]
+    return response.create_fines_response(team_fines_text)

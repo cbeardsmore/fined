@@ -100,8 +100,6 @@ def create_fines_response(team_fines):
         }
     )
 
-    print(response_template['blocks'])
-
     return response_template
 
 
