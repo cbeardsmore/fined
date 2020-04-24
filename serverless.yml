@@ -43,6 +43,15 @@ functions:
           method: post
     environment:
       SLACK_SIGNING_SECRET: ${ssm:/${self:service}/SLACK_SIGNING_SECRET~true}
+  interaction:
+    handler: interaction.handle
+    description: Interactivity Endpoint for Slack Interactive Payloads
+    events:
+      - http:
+          path: interaction
+          method: post
+    environment:
+      SLACK_SIGNING_SECRET: ${ssm:/${self:service}/SLACK_SIGNING_SECRET~true}
 
 resources:
   Resources:
