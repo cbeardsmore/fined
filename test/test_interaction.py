@@ -33,7 +33,6 @@ def test_handle_sets_headers_and_status_code(event):
 
 
 def test_handle_returns_default_help(event):
-    event['body'] = utils.set_body_text(event['body'], 'help')
     event = utils.update_signature(event)
     result = interaction.handle(event, {})
     assert result['body'] == json.dumps(response.create_help_response())
