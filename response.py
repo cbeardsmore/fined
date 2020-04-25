@@ -168,24 +168,60 @@ def create_pay_model(trigger_id):
             "callback_id": "modal-identifier",
             "title": {
                 "type": "plain_text",
-                "text": "Just a modal"
+                "text": "Pay Your Fine!",
+                "emoji": True
+            },
+            "submit": {
+                "type": "plain_text",
+                "text": "Mark as Paid",
+                "emoji": True
+            },
+            "close": {
+                "type": "plain_text",
+                "text": "Cancel",
+                "emoji": True
             },
             "blocks": [
                 {
                     "type": "section",
-                    "block_id": "section-identifier",
                     "text": {
                         "type": "mrkdwn",
-                        "text": "*Welcome* to ~my~ Block Kit _modal_!"
-                    },
-                    "accessory": {
-                        "type": "button",
-                        "text": {
-                            "type": "plain_text",
-                            "text": "Just a button"
-                        },
-                        "action_id": "button-identifier"
+                        "text": "💵 Time to pay up. You have 2 choices"
                     }
+                },
+                {
+                    "type": "divider"
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*🙆‍♂️ Pay the Team*"
+                    }
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "It's up to you how you payback the team. Our favourites include:\n\n     • Shout a coffee ☕️\n     • Pay for team lunch 🍔\n     • Buy the next round 🍻"
+                    }
+
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "*❤️ Donate to Charity*"
+                    }
+
+                },
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Pay it forward to a charity of your choice and give back to the community Here's some popular choices:\n\n     • <http://www.americanhumane.org/|American Humane>\n     • <https://www.hopeforthewarriors.org/| Hope for the Warriors>\n     • <https://www.beyondblue.org.au/|Beyond Blue>"
+                    }
+
                 }
             ]
         }
