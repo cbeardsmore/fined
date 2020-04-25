@@ -9,6 +9,7 @@ import const
 @pytest.fixture(scope="function")
 def mock_os(monkeypatch):
     monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', const.SIGNING_SECRET)
+    monkeypatch.setitem(os.environ, 'BOT_ACCESS_TOKEN', const.BOT_ACCESS_TOKEN)
     monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE', const.DYNAMO_DB_TABLE)
 
 
@@ -32,7 +33,7 @@ def test_handle_sets_headers_and_status_code(event):
     assert result['headers']['Content-Type'] == 'application/json'
 
 
-def test_handle_returns_default_help(event):
+def test_handle_returns_empty_response(event):
     event = utils.update_signature(event)
     result = interaction.handle(event, {})
-    assert result['body'] == json.dumps(response.create_help_response())
+    assert result['body'] == json.dumps('')
