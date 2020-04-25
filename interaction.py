@@ -12,9 +12,10 @@ def handle(event, _):
     if not auth.is_verified_request(event):
         return {'statusCode': 401}
 
+
     payload = json.loads(parse_qs(event['body'])['payload'][0])
+    print(payload)
     open_modal_response = open_modal(payload['trigger_id'])
-    
     print(open_modal_response.content)
     return response.wrap_response_body('')
 
