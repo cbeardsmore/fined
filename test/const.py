@@ -1,4 +1,5 @@
 SIGNING_SECRET = 'fake_secret'
+BOT_ACCESS_TOKEN = 'fake_bot_token'
 DYNAMO_DB_TABLE = 'table_name'
 TEAM_ID = 'fake_team_id'
 USERNAME = 'fake_user'

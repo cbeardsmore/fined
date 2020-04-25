@@ -52,6 +52,7 @@ functions:
           method: post
     environment:
       SLACK_SIGNING_SECRET: ${ssm:/${self:service}/SLACK_SIGNING_SECRET~true}
+      BOT_ACCESS_TOKEN: ${ssm:/${self:service}/BOT_ACCESS_TOKEN~true}
 
 resources:
   Resources:
@@ -68,4 +69,6 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        
+          
+plugins:
+  - serverless-python-requirements
