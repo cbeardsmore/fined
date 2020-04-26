@@ -34,13 +34,23 @@ def test_handle_returns_empty_response(event):
     assert result['body'] == json.dumps('')
 
 
-def test_open_modal_calls_slack_view_open(requests_mock, event):
+def test_handle_with_unknown_action_does_nothing(requests_mock, event):
+    event['body'] = utils.set_interaction_action_id(event['body'], 'random_action_id')
+    event = utils.update_signature(event)
     requests_mock.post(interaction.OPEN_VIEW_POST_URL)
-    interaction.open_modal(const.TRIGGER_ID)
+
+    interaction.handle(event, {})
+    assert requests_mock.call_count == 0
+
+def test_handle_with_pay_action_calls_slack_view_open(requests_mock, event):
+    event['body'] = utils.set_interaction_action_id(event['body'], interaction.ACTION_PAY_FINE)
+    event = utils.update_signature(event)
+    requests_mock.post(interaction.OPEN_VIEW_POST_URL)
+
+    interaction.handle(event, {})
     last_request = requests_mock.last_request
 
     assert requests_mock.call_count == 1
     assert last_request.json() == response.create_pay_model(const.TRIGGER_ID)
     assert last_request.headers['Content-Type'] == interaction.CONTENT_TYPE
     assert last_request.headers['Authorization'] == 'Bearer {}'.format(const.BOT_ACCESS_TOKEN)
- 

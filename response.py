@@ -84,12 +84,13 @@ def create_fines_response(team_fines):
                 "accessory": {
                     "type": "button",
                     "style": "primary",
+                    "action_id": "pay_fine_button",
                     "text": {
                         "type": "plain_text",
                         "text": "Pay",
                         "emoji": True
                     },
-                    "value": "Pay"
+                    "value": fine
                 }
             }
         )
