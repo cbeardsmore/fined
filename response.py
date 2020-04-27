@@ -10,6 +10,14 @@ def wrap_response_body(response_body):
         }
     }
 
+def create_empty_response():
+    return {
+        "statusCode": 200,
+        "body": "",
+        "headers": {
+            "Content-Type": "application/json"
+        }
+    }
 
 def create_fallback_response():
     return {
