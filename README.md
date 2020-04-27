@@ -9,6 +9,10 @@
 
 Slack Bot for managing Team Fines running on the Serverless framework
 
+<img src="./assets/help_rounded.png">
+
+
+
 ### Usage
 
 - Fine a user:
@@ -17,21 +21,17 @@ Slack Bot for managing Team Fines running on the Serverless framework
     
 - List fines and their reasons:
 
-    `/fine list`
-    
-- List total fines for the channel:
-
-    `/fine totals`
-    
-- List individual fines for the channel:
-
     `/fines`
+    
+- Get help:
+
+    `/fine help`
 
 ### Serverless Framework
 
-- Install:
+- Install Framework and Plugins:
 
-    `npm install -g serverless`
+    `npm install`
 
 - To deploy:
 
