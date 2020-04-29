@@ -16,16 +16,16 @@ def mock_os(monkeypatch):
 @pytest.fixture(scope="function")
 def event_pb(mock_os):
     event_payload = []
-    with open('local/pay_button.json') as file:
-        event_payload = json.load(file)
+    with open('local/pay_button.json') as event_file:
+        event_payload = json.load(event_file)
     return utils.update_signature(event_payload)
 
 
 @pytest.fixture(scope="function")
 def event_vs(mock_os):
     event_payload = []
-    with open('local/view_submission.json') as file:
-        event_payload = json.load(file)
+    with open('local/view_submission.json') as event_file:
+        event_payload = json.load(event_file)
     return utils.update_signature(event_payload)
 
 
@@ -59,7 +59,7 @@ def test_handle_with_pay_action_calls_slack_view_open(requests_mock, event_pb):
     last_request = requests_mock.last_request
 
     assert requests_mock.call_count == 1
-    assert last_request.json() == response.create_pay_model(const.TRIGGER_ID)
+    assert last_request.json() == response.create_pay_modal(const.TRIGGER_ID, const.FINE_ID)
     assert last_request.headers['Content-Type'] == interaction.CONTENT_TYPE
     assert last_request.headers['Authorization'] == 'Bearer {}'.format(const.BOT_ACCESS_TOKEN)
 
