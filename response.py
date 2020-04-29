@@ -170,12 +170,13 @@ def create_help_response():
     }
 
 
-def create_pay_model(trigger_id):
+def create_pay_modal(trigger_id, fine_id):
     return {
         "trigger_id": trigger_id,
         "view": {
             "type": "modal",
-            "callback_id": "modal-identifier",
+            "callback_id": "pay-modal",
+            "private_metadata": fine_id,
             "title": {
                 "type": "plain_text",
                 "text": "Pay Your Fine!",

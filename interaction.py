@@ -31,14 +31,15 @@ def handle(event, _):
 def handle_block_interaction(payload):
     trigger_action = payload['actions'][0]
     action_id = trigger_action['action_id']
+    action_value = trigger_action['value']
 
     if action_id == ACTION_PAY_FINE:
-        open_modal(payload['trigger_id'])
+        open_modal(payload['trigger_id'], action_value)
 
 
-def open_modal(trigger_id):
+def open_modal(trigger_id, fine_id):
     bot_access_token = os.environ['BOT_ACCESS_TOKEN']
-    data = response.create_pay_model(trigger_id)
+    data = response.create_pay_modal(trigger_id, fine_id)
 
     headers = {
         'Content-Type': CONTENT_TYPE,
