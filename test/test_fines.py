@@ -48,8 +48,11 @@ def test_handle_with_fine_text_returns_valid_response(event):
     text = '@fake_user_2 $50 for reason'
     event['body'] = utils.set_body_text(event['body'], '')
     event = utils.update_signature(event)
+
     dynamo.create_table()
-    dynamo.add_fine(const.TEAM_ID, const.USERNAME, text)
+    dynamo.add_fine(const.TEAM_ID, const.USERNAME, text, const.FINE_ID)
     result = fines.handle(event, {})
-    assert result['body'] == json.dumps(response.create_fines_response([text]))
+
+    expected_fine = [{'finedBy': const.USERNAME, 'text': text, 'id': const.FINE_ID}]
+    assert result['body'] == json.dumps(response.create_fines_response(expected_fine))
     
