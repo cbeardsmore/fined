@@ -65,6 +65,7 @@ def create_fine_response(user_name):
 
 
 def create_fines_response(team_fines):
+    print(team_fines)
     response_template = {
         "response_type": "in_channel",
         "blocks": [
@@ -87,7 +88,7 @@ def create_fines_response(team_fines):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": "\u2022 {} ".format(fine)
+                    "text": "\u2022 {} ".format(fine['text'])
                 },
                 "accessory": {
                     "type": "button",
@@ -98,7 +99,7 @@ def create_fines_response(team_fines):
                         "text": "Pay",
                         "emoji": True
                     },
-                    "value": fine
+                    "value": fine['id']
                 }
             }
         )

@@ -1,5 +1,6 @@
 import re
 from urllib.parse import parse_qs
+import uuid
 import auth
 import response
 import dynamo
@@ -28,7 +29,8 @@ def handle_fine_request(params, text):
     user_name = params['user_name'][0]
     team_id = params['team_id'][0]
     user_name_fined = re.search(FINE_REGEX, text).group(1).strip()
+    fine_id = str(uuid.uuid4())
 
-    dynamo.update_item(team_id, user_name, text)
+    dynamo.add_fine(team_id, user_name, text, fine_id)
     return response.create_fine_response(user_name_fined)
     

@@ -23,10 +23,9 @@ def handle(event, _):
 
 def handle_fines_request(params):
     team_id = params['team_id'][0]
-    team_fines = dynamo.get_item(team_id)
+    team_fines = dynamo.get_fines(team_id)
 
     if team_fines is None:
         return response.create_no_fines_response()
 
-    team_fines_text = [x['text'] for x in team_fines]
-    return response.create_fines_response(team_fines_text)
+    return response.create_fines_response(team_fines)

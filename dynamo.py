@@ -6,7 +6,7 @@ AWS_REGION = 'us-east-1'
 DYNAMO_ENV_KEY = 'DYNAMODB_TABLE'
 
 
-def update_item(team_id, user_name, text):
+def add_fine(team_id, user_name, text, id):
     dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
     table_name = os.environ[DYNAMO_ENV_KEY]
     dynamodb.update_item(
@@ -15,12 +15,16 @@ def update_item(team_id, user_name, text):
         UpdateExpression='SET teamFines = list_append(if_not_exists(teamFines, :emptyList), :fine)',
         ExpressionAttributeValues={
             ':emptyList': {'L': []},
-            ':fine': {'L': [{'M': {'finedBy': {'S': user_name}, 'text': {'S': text}}}]}
+            ':fine': {'L': [{'M': {
+                'finedBy': {'S': user_name},
+                'text': {'S': text},
+                'id': {'S': id}
+            }}]}
         }
     )
 
 
-def get_item(team_id):
+def get_fines(team_id):
     dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
     table_name = os.environ[DYNAMO_ENV_KEY]
     dynamo_response = dynamodb.get_item(
