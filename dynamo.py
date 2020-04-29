@@ -6,7 +6,7 @@ AWS_REGION = 'us-east-1'
 DYNAMO_ENV_KEY = 'DYNAMODB_TABLE'
 
 
-def update_item(team_id, user_name, text):
+def add_fine(team_id, user_name, text):
     dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
     table_name = os.environ[DYNAMO_ENV_KEY]
     dynamodb.update_item(
@@ -20,7 +20,7 @@ def update_item(team_id, user_name, text):
     )
 
 
-def get_item(team_id):
+def get_fines(team_id):
     dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
     table_name = os.environ[DYNAMO_ENV_KEY]
     dynamo_response = dynamodb.get_item(

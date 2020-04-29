@@ -29,6 +29,6 @@ def handle_fine_request(params, text):
     team_id = params['team_id'][0]
     user_name_fined = re.search(FINE_REGEX, text).group(1).strip()
 
-    dynamo.update_item(team_id, user_name, text)
+    dynamo.add_fine(team_id, user_name, text)
     return response.create_fine_response(user_name_fined)
     
