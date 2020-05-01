@@ -1,10 +1,12 @@
 import json
 import os
+from moto import mock_dynamodb2
 import pytest
 import interaction
 import utils
 import const
 import response
+import dynamo
 
 @pytest.fixture(scope="function")
 def mock_os(monkeypatch):
@@ -64,7 +66,14 @@ def test_handle_with_pay_action_calls_slack_view_open(requests_mock, event_pb):
     assert last_request.headers['Authorization'] == 'Bearer {}'.format(const.BOT_ACCESS_TOKEN)
 
 
-def test_handle_with_view_submission_does_nothing(requests_mock, event_vs):
+@mock_dynamodb2
+def test_handle_with_view_submission_deletes_fine(requests_mock, event_vs):
     requests_mock.post(interaction.OPEN_VIEW_POST_URL)
+    dynamo.create_table()
+    dynamo.add_fine(const.TEAM_ID, const.USERNAME, 'fine_text', const.FINE_ID)
+
     interaction.handle(event_vs, {})
+    fines = dynamo.get_fines(const.TEAM_ID)
+
     assert requests_mock.call_count == 0
+    assert fines == []
