@@ -24,6 +24,24 @@ def add_fine(team_id, user_name, text, id):
     )
 
 
+def delete_fine(team_id, fine_id):
+    team_fines = get_fines(team_id)
+    fine_index_list = [x for x in range(len(team_fines)) if team_fines[x]['id'] == fine_id]
+    fine_index = str(fine_index_list[0])
+
+    dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
+    table_name = os.environ[DYNAMO_ENV_KEY]
+    dynamodb.update_item(
+        TableName=table_name,
+        Key={'teamId': {'S': team_id}},
+        UpdateExpression='REMOVE teamFines[' + fine_index + ']',
+        ConditionExpression='teamFines[' + fine_index + '].id = :fineId',
+        ExpressionAttributeValues={
+            ':fineId': {'S': fine_id}
+        }
+    )
+
+
 def get_fines(team_id):
     dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
     table_name = os.environ[DYNAMO_ENV_KEY]

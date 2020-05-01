@@ -4,6 +4,7 @@ import os
 import requests
 import auth
 import response
+import dynamo
 
 OPEN_VIEW_POST_URL = 'https://slack.com/api/views.open'
 CONTENT_TYPE = 'application/json; charset=utf-8'
@@ -49,6 +50,6 @@ def open_modal(trigger_id, fine_id):
 
 
 def handle_view_submission(payload):
-    # todo: handle modal submissions via DynamoDB deletion
-    print(payload)
-    
+    fine_id = payload['view']['private_metadata']
+    team_id = payload['team']['id']
+    dynamo.delete_fine(team_id, fine_id)
