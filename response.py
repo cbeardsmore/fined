@@ -65,7 +65,6 @@ def create_fine_response(user_name):
 
 
 def create_fines_response(team_fines):
-    print(team_fines)
     response_template = {
         "response_type": "in_channel",
         "blocks": [
