@@ -33,14 +33,15 @@ def handle_block_interaction(payload):
     trigger_action = payload['actions'][0]
     action_id = trigger_action['action_id']
     action_value = trigger_action['value']
+    channel_id = payload['channel']['id']
 
     if action_id == ACTION_PAY_FINE:
-        open_modal(payload['trigger_id'], action_value)
+        open_modal(payload['trigger_id'], channel_id, action_value)
 
 
-def open_modal(trigger_id, fine_id):
+def open_modal(trigger_id, channel_id, fine_id):
     bot_access_token = os.environ['BOT_ACCESS_TOKEN']
-    data = response.create_pay_modal(trigger_id, fine_id)
+    data = response.create_pay_modal(trigger_id, channel_id, fine_id)
 
     headers = {
         'Content-Type': CONTENT_TYPE,
@@ -50,6 +51,7 @@ def open_modal(trigger_id, fine_id):
 
 
 def handle_view_submission(payload):
-    fine_id = payload['view']['private_metadata']
     team_id = payload['team']['id']
-    dynamo.delete_fine(team_id, fine_id)
+    channel_id = payload['view']['callback_id']
+    fine_id = payload['view']['private_metadata']
+    dynamo.delete_fine(team_id, channel_id, fine_id)

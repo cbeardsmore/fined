@@ -169,12 +169,12 @@ def create_help_response():
     }
 
 
-def create_pay_modal(trigger_id, fine_id):
+def create_pay_modal(trigger_id, channel_id, fine_id):
     return {
         "trigger_id": trigger_id,
         "view": {
             "type": "modal",
-            "callback_id": "pay-modal",
+            "callback_id": channel_id,
             "private_metadata": fine_id,
             "title": {
                 "type": "plain_text",

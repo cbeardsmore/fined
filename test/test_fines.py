@@ -36,7 +36,7 @@ def test_handle_with_help_text_returns_help(event):
 
 
 @mock_dynamodb2
-def test_handle_with_fines_returns_fines_list(event):
+def test_handle_with_no_fines_returns_no_fines_response(event):
     event = utils.update_signature(event)
     dynamo.create_table()
     result = fines.handle(event, {})
@@ -50,7 +50,7 @@ def test_handle_with_fine_text_returns_valid_response(event):
     event = utils.update_signature(event)
 
     dynamo.create_table()
-    dynamo.add_fine(const.TEAM_ID, const.USERNAME, text, const.FINE_ID)
+    dynamo.add_fine(const.TEAM_ID, const.CHANNEL_ID, const.USERNAME, text, const.FINE_ID)
     result = fines.handle(event, {})
 
     expected_fine = [{'finedBy': const.USERNAME, 'text': text, 'id': const.FINE_ID}]
