@@ -9,7 +9,9 @@ provider:
   apiName: ${self:service}
   stage: ${opt:stage,'dev'}
   environment:
-    DYNAMODB_TABLE: ${self:service}-${self:provider.stage}
+    DYNAMODB_TABLE_FINES: ${self:service}-${self:provider.stage}-fines
+    DYNAMODB_TABLE_TOKENS: ${self:service}-${self:provider.stage}-tokens
+    SLACK_SIGNING_SECRET: ${ssm:/${self:service}/${self:provider.stage}/SLACK_SIGNING_SECRET~true}
   memorySize: 512
   iamRoleStatements:
     - Effect: Allow
@@ -20,7 +22,7 @@ provider:
         - dynamodb:GetItem
         - dynamodb:PutItem
         - dynamodb:UpdateItem
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}'
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_FINES}'
   stackTags:
     PROJECT: ${self:service}
 
@@ -32,8 +34,6 @@ functions:
       - http:
           path: fine
           method: post
-    environment:
-      SLACK_SIGNING_SECRET: ${ssm:/${self:service}/SLACK_SIGNING_SECRET~true}
   fines:
     handler: fines.handle
     description: List all user fines
@@ -41,8 +41,6 @@ functions:
       - http:
           path: fines
           method: post
-    environment:
-      SLACK_SIGNING_SECRET: ${ssm:/${self:service}/SLACK_SIGNING_SECRET~true}
   interaction:
     handler: interaction.handle
     description: Interactivity Endpoint for Slack Interactive Payloads
@@ -51,7 +49,6 @@ functions:
           path: interaction
           method: post
     environment:
-      SLACK_SIGNING_SECRET: ${ssm:/${self:service}/SLACK_SIGNING_SECRET~true}
       BOT_ACCESS_TOKEN: ${ssm:/${self:service}/BOT_ACCESS_TOKEN~true}
 
 resources:
@@ -59,7 +56,7 @@ resources:
     finesTable: 
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.DYNAMODB_TABLE}
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_FINES}
         AttributeDefinitions:
           - AttributeName: teamChannelId
             AttributeType: S
@@ -69,10 +66,26 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-          
+
+    tokensTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.DYNAMODB_TABLE_TOKENS}
+        AttributeDefinitions:
+          - AttributeName: teamId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: teamId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 plugins:
   - serverless-python-requirements
 
 package:
   exclude:
+    - assets/
+    - local/**
     - node_modules/**
+    - test/**
