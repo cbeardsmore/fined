@@ -3,7 +3,7 @@ import boto3
 from boto3.dynamodb.types import TypeDeserializer
 
 AWS_REGION = 'us-east-1'
-DYNAMO_ENV_KEY = 'DYNAMODB_TABLE'
+DYNAMO_ENV_KEY = 'DYNAMODB_TABLE_FINES'
 
 
 def add_fine(team_id, channel_id, user_name, text, id):

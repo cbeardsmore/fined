@@ -11,7 +11,7 @@ import const
 @pytest.fixture(scope="function")
 def mock_os(monkeypatch):
     monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', const.SIGNING_SECRET)
-    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE', const.DYNAMO_DB_TABLE)
+    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE_FINES', const.DYNAMO_DB_TABLE)
 
 
 @pytest.fixture(scope="function")
