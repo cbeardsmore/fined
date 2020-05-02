@@ -28,7 +28,8 @@ def handle(event, _):
 def handle_fine_request(params, text):
     user_name = params['user_name'][0]
     team_id = params['team_id'][0]
-    channel_id = None
+    # TODO: figure out why parse_qs is wrapping certain values, move to using parse_sql
+    channel_id = params['channel_id'][0].strip("['']")
     user_name_fined = re.search(FINE_REGEX, text).group(1).strip()
     fine_id = str(uuid.uuid4())
 

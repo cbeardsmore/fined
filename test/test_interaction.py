@@ -61,7 +61,7 @@ def test_handle_with_pay_action_calls_slack_view_open(requests_mock, event_pb):
     last_request = requests_mock.last_request
 
     assert requests_mock.call_count == 1
-    assert last_request.json() == response.create_pay_modal(const.TRIGGER_ID, const.FINE_ID)
+    assert last_request.json() == response.create_pay_modal(const.TRIGGER_ID, const.CHANNEL_ID, const.FINE_ID)
     assert last_request.headers['Content-Type'] == interaction.CONTENT_TYPE
     assert last_request.headers['Authorization'] == 'Bearer {}'.format(const.BOT_ACCESS_TOKEN)
 

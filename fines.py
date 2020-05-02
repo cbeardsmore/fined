@@ -23,10 +23,11 @@ def handle(event, _):
 
 def handle_fines_request(params):
     team_id = params['team_id'][0]
-    channel_id = None
+    # TODO: figure out why parse_qs is wrapping certain values, move to using parse_sql
+    channel_id = params['channel_id'][0].strip("['']")
     team_fines = dynamo.get_fines(team_id, channel_id)
 
-    if team_fines is None:
+    if not team_fines:
         return response.create_no_fines_response()
 
     return response.create_fines_response(team_fines)

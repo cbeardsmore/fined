@@ -81,5 +81,5 @@ def create_table():
 
 
 def get_team_channel_id(team_id, channel_id):
-    return team_id
-    #return "{}-{}".format(team_id, channel_id)
+    print('teamId: {}, channelId: {}'.format(team_id, channel_id))
+    return '{}-{}'.format(team_id, channel_id)
