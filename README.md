@@ -19,7 +19,7 @@ Slack Bot for managing Team Fines running on the Serverless framework
 
     `/fine @user $amount for reason`
     
-- List fines and their reasons:
+- List all channel fines:
 
     `/fines`
     
@@ -36,10 +36,6 @@ Slack Bot for managing Team Fines running on the Serverless framework
 - To deploy:
 
     `serverless deploy`
-
-- Run lambda function locally with JSON event payload:
-
-    `serverless invoke local --function fine --path local/fine.json -e SLACK_SIGNING_SECRET=fake_secret`
 
 ### Testing
 

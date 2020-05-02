@@ -18,7 +18,7 @@ def mock_os(monkeypatch):
 @pytest.fixture(scope="function")
 def event_pb(mock_os):
     event_payload = []
-    with open('local/pay_button.json') as event_file:
+    with open('test/payloads/pay_button.json') as event_file:
         event_payload = json.load(event_file)
     return utils.update_signature(event_payload)
 
@@ -26,7 +26,7 @@ def event_pb(mock_os):
 @pytest.fixture(scope="function")
 def event_vs(mock_os):
     event_payload = []
-    with open('local/view_submission.json') as event_file:
+    with open('test/payloads/view_submission.json') as event_file:
         event_payload = json.load(event_file)
     return utils.update_signature(event_payload)
 
