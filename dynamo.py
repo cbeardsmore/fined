@@ -11,7 +11,7 @@ def add_fine(team_id, user_name, text, id):
     table_name = os.environ[DYNAMO_ENV_KEY]
     dynamodb.update_item(
         TableName=table_name,
-        Key={'teamId': {'S': team_id}},
+        Key={'teamChannelId': {'S': team_id}},
         UpdateExpression='SET teamFines = list_append(if_not_exists(teamFines, :emptyList), :fine)',
         ExpressionAttributeValues={
             ':emptyList': {'L': []},
@@ -33,7 +33,7 @@ def delete_fine(team_id, fine_id):
     table_name = os.environ[DYNAMO_ENV_KEY]
     dynamodb.update_item(
         TableName=table_name,
-        Key={'teamId': {'S': team_id}},
+        Key={'teamChannelId': {'S': team_id}},
         UpdateExpression='REMOVE teamFines[' + fine_index + ']',
         ConditionExpression='teamFines[' + fine_index + '].id = :fineId',
         ExpressionAttributeValues={
@@ -47,7 +47,7 @@ def get_fines(team_id):
     table_name = os.environ[DYNAMO_ENV_KEY]
     dynamo_response = dynamodb.get_item(
         TableName=table_name,
-        Key={'teamId': {'S': team_id}}
+        Key={'teamChannelId': {'S': team_id}}
     )
 
     if (dynamo_response.get('Item') is None or dynamo_response['Item']['teamFines'] is None):
@@ -63,13 +63,14 @@ def create_table():
     dynamodb.create_table(
         TableName=table_name,
         KeySchema=[{
-            'AttributeName': 'teamId',
+            'AttributeName': 'teamChannelId',
             'KeyType': 'HASH'
         }],
         AttributeDefinitions=[
             {
-                'AttributeName': 'teamId',
+                'AttributeName': 'teamChannelId',
                 'AttributeType': 'S'
             }
         ],
     )
+    
