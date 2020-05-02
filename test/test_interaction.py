@@ -70,10 +70,10 @@ def test_handle_with_pay_action_calls_slack_view_open(requests_mock, event_pb):
 def test_handle_with_view_submission_deletes_fine(requests_mock, event_vs):
     requests_mock.post(interaction.OPEN_VIEW_POST_URL)
     dynamo.create_table()
-    dynamo.add_fine(const.TEAM_ID, const.USERNAME, 'fine_text', const.FINE_ID)
+    dynamo.add_fine(const.TEAM_ID, const.CHANNEL_ID, const.USERNAME, 'fine_text', const.FINE_ID)
 
     interaction.handle(event_vs, {})
-    fines = dynamo.get_fines(const.TEAM_ID)
+    fines = dynamo.get_fines(const.TEAM_ID, const.CHANNEL_ID)
 
     assert requests_mock.call_count == 0
     assert fines == []

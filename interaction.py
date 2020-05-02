@@ -52,4 +52,5 @@ def open_modal(trigger_id, fine_id):
 def handle_view_submission(payload):
     fine_id = payload['view']['private_metadata']
     team_id = payload['team']['id']
-    dynamo.delete_fine(team_id, fine_id)
+    channel_id = None
+    dynamo.delete_fine(team_id, channel_id, fine_id)

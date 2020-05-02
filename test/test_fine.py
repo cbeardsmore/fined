@@ -65,7 +65,7 @@ def test_handle_with_fine_text_saves_dynamo_item(event):
     event = utils.update_signature(event)
     dynamo.create_table()
     fine.handle(event, {})
-    fine_item = dynamo.get_fines(const.TEAM_ID)[0]
+    fine_item = dynamo.get_fines(const.TEAM_ID, const.CHANNEL_ID)[0]
     assert fine_item['finedBy'] == const.USERNAME
     assert fine_item['text'] == text
     assert fine_item['id'] is not None

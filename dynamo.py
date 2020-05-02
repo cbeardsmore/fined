@@ -6,12 +6,13 @@ AWS_REGION = 'us-east-1'
 DYNAMO_ENV_KEY = 'DYNAMODB_TABLE'
 
 
-def add_fine(team_id, user_name, text, id):
+def add_fine(team_id, channel_id, user_name, text, id):
     dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
     table_name = os.environ[DYNAMO_ENV_KEY]
+    team_channel_id = get_team_channel_id(team_id, channel_id)
     dynamodb.update_item(
         TableName=table_name,
-        Key={'teamChannelId': {'S': team_id}},
+        Key={'teamChannelId': {'S': team_channel_id}},
         UpdateExpression='SET teamFines = list_append(if_not_exists(teamFines, :emptyList), :fine)',
         ExpressionAttributeValues={
             ':emptyList': {'L': []},
@@ -24,16 +25,18 @@ def add_fine(team_id, user_name, text, id):
     )
 
 
-def delete_fine(team_id, fine_id):
-    team_fines = get_fines(team_id)
+def delete_fine(team_id, channel_id, fine_id):
+    team_fines = get_fines(team_id, channel_id)
     fine_index_list = [x for x in range(len(team_fines)) if team_fines[x]['id'] == fine_id]
     fine_index = str(fine_index_list[0])
 
     dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
     table_name = os.environ[DYNAMO_ENV_KEY]
+    team_channel_id = get_team_channel_id(team_id, channel_id)
+
     dynamodb.update_item(
         TableName=table_name,
-        Key={'teamChannelId': {'S': team_id}},
+        Key={'teamChannelId': {'S': team_channel_id}},
         UpdateExpression='REMOVE teamFines[' + fine_index + ']',
         ConditionExpression='teamFines[' + fine_index + '].id = :fineId',
         ExpressionAttributeValues={
@@ -42,12 +45,14 @@ def delete_fine(team_id, fine_id):
     )
 
 
-def get_fines(team_id):
+def get_fines(team_id, channel_id):
     dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
     table_name = os.environ[DYNAMO_ENV_KEY]
+    team_channel_id = get_team_channel_id(team_id, channel_id)
+
     dynamo_response = dynamodb.get_item(
         TableName=table_name,
-        Key={'teamChannelId': {'S': team_id}}
+        Key={'teamChannelId': {'S': team_channel_id}}
     )
 
     if (dynamo_response.get('Item') is None or dynamo_response['Item']['teamFines'] is None):
@@ -73,4 +78,8 @@ def create_table():
             }
         ],
     )
-    
+
+
+def get_team_channel_id(team_id, channel_id):
+    return team_id
+    #return "{}-{}".format(team_id, channel_id)

@@ -23,7 +23,8 @@ def handle(event, _):
 
 def handle_fines_request(params):
     team_id = params['team_id'][0]
-    team_fines = dynamo.get_fines(team_id)
+    channel_id = None
+    team_fines = dynamo.get_fines(team_id, channel_id)
 
     if team_fines is None:
         return response.create_no_fines_response()

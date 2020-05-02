@@ -50,7 +50,7 @@ def test_handle_with_fine_text_returns_valid_response(event):
     event = utils.update_signature(event)
 
     dynamo.create_table()
-    dynamo.add_fine(const.TEAM_ID, const.USERNAME, text, const.FINE_ID)
+    dynamo.add_fine(const.TEAM_ID, const.CHANNEL_ID, const.USERNAME, text, const.FINE_ID)
     result = fines.handle(event, {})
 
     expected_fine = [{'finedBy': const.USERNAME, 'text': text, 'id': const.FINE_ID}]
