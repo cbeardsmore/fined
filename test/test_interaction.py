@@ -12,7 +12,7 @@ import dynamo
 def mock_os(monkeypatch):
     monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', const.SIGNING_SECRET)
     monkeypatch.setitem(os.environ, 'BOT_ACCESS_TOKEN', const.BOT_ACCESS_TOKEN)
-    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE_FINES', const.DYNAMO_DB_TABLE)
+    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE_FINES', const.DYNAMODB_TABLE_FINES)
 
 
 @pytest.fixture(scope="function")
@@ -69,7 +69,7 @@ def test_handle_with_pay_action_calls_slack_view_open(requests_mock, event_pb):
 @mock_dynamodb2
 def test_handle_with_view_submission_deletes_fine(requests_mock, event_vs):
     requests_mock.post(interaction.OPEN_VIEW_POST_URL)
-    dynamo.create_table()
+    dynamo.create_fine_table()
     dynamo.add_fine(const.TEAM_ID, const.CHANNEL_ID, const.USERNAME, 'fine_text', const.FINE_ID)
 
     interaction.handle(event_vs, {})

@@ -13,8 +13,8 @@ def handle(event, _):
     if query_parameters['state'] != ADD_TO_SLACK_STATE:
         return {'statusCode': 401}
 
-    team_id, access_token = exchange_auth_code(query_parameters['code'])
-    dynamo.update_access_token(team_id, access_token)
+    team, access_token = exchange_auth_code(query_parameters['code'])
+    dynamo.update_access_token(team, access_token)
 
     return response.create_empty_response()
 
@@ -29,5 +29,4 @@ def exchange_auth_code(code):
 
     access_token_payload = requests.post(OAUTH_ACCESS_POST_URL, headers=headers, data=data)
     body = access_token_payload.json()
-    print(body)
-    return body['team']['id'], body['access_token']
+    return body['team'], body['access_token']
