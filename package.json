@@ -3,7 +3,7 @@
   "description": "A Slackbot for Managing Team Fines",
   "version": "0.1.0",
   "dependencies": {
-    "serverless": "^1.68.0"
+    "serverless": "^1.69.0"
   },
   "devDependencies": {
     "serverless-python-requirements": "^5.1.0"

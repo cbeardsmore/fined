@@ -55,7 +55,7 @@ def test_handle_with_valid_state_exchanges_access_token(requests_mock, event):
     expected_text = 'client_id={}&client_secret={}&code={}'.format(
         const.CLIENT_ID, const.CLIENT_SECRET, const.AUTH_CODE)
     assert requests_mock.call_count == 1
-    assert requests_mock.last_request.text != expected_text
+    assert requests_mock.last_request.text == expected_text
 
 
 @mock_dynamodb2
