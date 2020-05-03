@@ -8,7 +8,7 @@ import const
 @pytest.fixture(scope="function")
 def event(monkeypatch):
     monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', const.SIGNING_SECRET)
-    with open('local/fine.json') as file:
+    with open('test/payloads/fine.json') as file:
         return json.load(file)
 
 def test_is_verified_request_for_valid_request(event):

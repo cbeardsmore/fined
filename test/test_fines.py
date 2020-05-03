@@ -17,7 +17,7 @@ def mock_os(monkeypatch):
 @pytest.fixture(scope="function")
 def event(mock_os):
     event_payload = []
-    with open('local/fines.json') as file:
+    with open('test/payloads/fines.json') as file:
         event_payload = json.load(file)
     return utils.update_signature(event_payload)
 
