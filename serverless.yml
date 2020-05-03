@@ -25,7 +25,9 @@ provider:
         - dynamodb:GetItem
         - dynamodb:PutItem
         - dynamodb:UpdateItem
-      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_FINES}'
+      Resource:
+        - 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_FINES}'
+        - 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE_TOKENS}'
   stackTags:
     PROJECT: ${self:service}
 
@@ -51,8 +53,6 @@ functions:
       - http:
           path: interaction
           method: post
-    environment:
-      BOT_ACCESS_TOKEN: ${ssm:/${self:service}/BOT_ACCESS_TOKEN~true}
   oauth:
     handler: oauth.handle
     description: OAuth endpoint to exchange Slack code for workspace access tokens 

@@ -11,8 +11,8 @@ import dynamo
 @pytest.fixture(scope="function")
 def mock_os(monkeypatch):
     monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', const.SIGNING_SECRET)
-    monkeypatch.setitem(os.environ, 'BOT_ACCESS_TOKEN', const.BOT_ACCESS_TOKEN)
     monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE_FINES', const.DYNAMODB_TABLE_FINES)
+    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE_TOKENS', const.DYNAMODB_TABLE_TOKENS)
 
 
 @pytest.fixture(scope="function")
@@ -52,10 +52,13 @@ def test_handle_with_unknown_action_does_nothing(requests_mock, event_pb):
     interaction.handle(event_pb, {})
     assert requests_mock.call_count == 0
 
+@mock_dynamodb2
 def test_handle_with_pay_action_calls_slack_view_open(requests_mock, event_pb):
     event_pb['body'] = utils.set_interaction_action_id(event_pb['body'], interaction.ACTION_PAY_FINE)
     event_pb = utils.update_signature(event_pb)
     requests_mock.post(interaction.OPEN_VIEW_POST_URL)
+    dynamo.create_token_table()
+    dynamo.update_access_token({'id': const.TEAM_ID, 'name': const.TEAM_NAME}, const.BOT_ACCESS_TOKEN)
 
     interaction.handle(event_pb, {})
     last_request = requests_mock.last_request
