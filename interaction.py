@@ -34,13 +34,14 @@ def handle_block_interaction(payload):
     action_id = trigger_action['action_id']
     action_value = trigger_action['value']
     channel_id = payload['channel']['id']
+    team_id = payload['team']['id']
 
     if action_id == ACTION_PAY_FINE:
-        open_modal(payload['trigger_id'], channel_id, action_value)
+        open_modal(payload['trigger_id'], team_id, channel_id, action_value)
 
 
-def open_modal(trigger_id, channel_id, fine_id):
-    bot_access_token = os.environ['BOT_ACCESS_TOKEN']
+def open_modal(trigger_id, team_id, channel_id, fine_id):
+    bot_access_token = dynamo.get_access_token(team_id)
     data = response.create_pay_modal(trigger_id, channel_id, fine_id)
 
     headers = {
