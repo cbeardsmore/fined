@@ -12,6 +12,9 @@ provider:
     DYNAMODB_TABLE_FINES: ${self:service}-${self:provider.stage}-fines
     DYNAMODB_TABLE_TOKENS: ${self:service}-${self:provider.stage}-tokens
     SLACK_SIGNING_SECRET: ${ssm:/${self:service}/${self:provider.stage}/SLACK_SIGNING_SECRET~true}
+    CLIENT_ID: ${ssm:/${self:service}/${self:provider.stage}/CLIENT_ID~true}
+    CLIENT_SECRET: ${ssm:/${self:service}/${self:provider.stage}/CLIENT_SECRET~true}
+
   memorySize: 512
   iamRoleStatements:
     - Effect: Allow
