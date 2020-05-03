@@ -1,11 +1,12 @@
 import os
 import boto3
 from boto3.dynamodb.types import TypeDeserializer
+from datetime import datetime
 
 AWS_REGION = 'us-east-1'
 DYNAMO_ENV_KEY_FINES = 'DYNAMODB_TABLE_FINES'
 DYNAMO_ENV_KEY_TOKENS = 'DYNAMODB_TABLE_TOKENS'
-
+DATETIME_FORMAT = '%d/%m/%Y %H:%M:%S'
 
 def add_fine(team_id, channel_id, user_name, text, id):
     dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
@@ -32,10 +33,11 @@ def update_access_token(team, access_token):
     dynamodb.update_item(
         TableName=table_name,
         Key={'teamId': {'S': team['id']}},
-        UpdateExpression='SET accessToken = :access_token, teamName = :team_name',
+        UpdateExpression='SET accessToken = :access_token, teamName = :team_name, lastUpdated = :last_updated',
         ExpressionAttributeValues={
             ':access_token': {'S': access_token},
-            ':team_name': {'S': team['name']}
+            ':team_name': {'S': team['name']},
+            ':last_updated': {'S': datetime.now().strftime(DATETIME_FORMAT)}
         }
     )
 
