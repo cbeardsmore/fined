@@ -25,6 +25,12 @@ def add_fine(team_id, channel_id, user_name, text, id):
     )
 
 
+def update_access_token(team_id, access_token):
+    dynamodb = boto3.client('dynamodb', region_name=AWS_REGION)
+    table_name = os.environ[DYNAMO_ENV_KEY]
+    print(team_id, access_token)
+
+
 def delete_fine(team_id, channel_id, fine_id):
     team_fines = get_fines(team_id, channel_id)
     fine_index_list = [x for x in range(len(team_fines)) if team_fines[x]['id'] == fine_id]
