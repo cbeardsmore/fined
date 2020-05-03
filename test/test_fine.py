@@ -11,7 +11,7 @@ import const
 @pytest.fixture(scope="function")
 def mock_os(monkeypatch):
     monkeypatch.setitem(os.environ, 'SLACK_SIGNING_SECRET', const.SIGNING_SECRET)
-    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE_FINES', const.DYNAMO_DB_TABLE)
+    monkeypatch.setitem(os.environ, 'DYNAMODB_TABLE_FINES', const.DYNAMODB_TABLE_FINES)
 
 
 @pytest.fixture(scope="function")
@@ -53,7 +53,7 @@ def test_handle_with_fine_text_returns_valid_response(event):
     body_text = '@{} $50 for reason'.format(const.USERNAME_FINED)
     event['body'] = utils.set_body_text(event['body'], body_text)
     event = utils.update_signature(event)
-    dynamo.create_table()
+    dynamo.create_fine_table()
     result = fine.handle(event, {})
     assert result['body'] == json.dumps(response.create_fine_response(const.USERNAME_FINED))
 
@@ -64,7 +64,7 @@ def test_handle_with_fine_text_saves_dynamo_item(event):
     event['body'] = utils.set_body_text(event['body'], text)
     event = utils.update_signature(event)
 
-    dynamo.create_table()
+    dynamo.create_fine_table()
     fine.handle(event, {})
     fine_item = dynamo.get_fines(const.TEAM_ID, const.CHANNEL_ID)[0]
     
