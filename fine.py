@@ -6,7 +6,7 @@ import response
 import dynamo
 
 HELP_REGEX = r'help'
-FINE_REGEX = r'@(.*)\$.*for.*'
+FINE_REGEX = r'@(.+) \$?[0-9]+ for .+'
 
 def handle(event, _):
     if not auth.is_verified_request(event):
