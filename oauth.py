@@ -16,7 +16,7 @@ def handle(event, _):
     team, access_token = exchange_auth_code(query_parameters['code'])
     dynamo.update_access_token(team, access_token)
 
-    return response.create_empty_response()
+    return response.create_redirect_response()
 
 
 def exchange_auth_code(code):

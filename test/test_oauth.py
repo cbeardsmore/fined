@@ -5,7 +5,7 @@ import pytest
 import oauth
 import const
 import dynamo
-
+import response
 
 @pytest.fixture(scope="function")
 def mock_os(monkeypatch):
@@ -29,7 +29,7 @@ def test_handle_with_invalid_state_returns_401(event):
 
 
 @mock_dynamodb2
-def test_handle_with_valid_state_returns_empty_response(requests_mock, event):
+def test_handle_with_valid_state_returns_302_redirect(requests_mock, event):
     dynamo.create_token_table()
     requests_mock.post(oauth.OAUTH_ACCESS_POST_URL, text=json.dumps({
         'team': {'id': const.TEAM_ID, 'name': const.TEAM_NAME},
@@ -37,9 +37,8 @@ def test_handle_with_valid_state_returns_empty_response(requests_mock, event):
     }))
 
     result = oauth.handle(event, {})
-    assert result['statusCode'] == 200
-    assert result['headers']['Content-Type'] == 'application/json'
-    assert result['body'] == ''
+    assert result['statusCode'] == 302
+    assert result['headers']['Location'] == response.SLACK_INSTALL_REDIRECT_URL
 
 
 @mock_dynamodb2
