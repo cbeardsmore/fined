@@ -1,0 +1,62 @@
+html {
+    scroll-behavior: smooth;
+}
+
+#banner h2 .title-icon {
+    width: 4em;
+    margin: auto;
+    display: block;
+}
+
+#menu .slack {
+    margin: auto;
+    margin-top: 0.5em;
+    display: block;
+}
+
+span.highlight {
+    color: #ebb13e;
+    font-weight: bold;
+}
+
+.slack {
+    border-bottom: none;
+}
+
+.slack img {
+    width: 187.65px;
+    height: 54px;
+}
+
+.slackExample {
+    width: 950px;
+    height: 584.203px;
+    -webkit-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.75);
+    box-shadow: 0px 0px 15px 1px rgba(0, 0, 0, 0.75);
+}
+
+.spotlight {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.iconContainer {
+    font-size: 4em;
+    color: #ebb13e;
+    margin: 0 1em;
+}
+
+.spotlight:nth-child(1) {
+    padding-top: 30px;
+}
+
+span.robot {
+    font-size: 3em;
+}
+
+.code {
+    /* color: #ebb13e; */
+    color: #00ffcc;
+}
