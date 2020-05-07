@@ -14,6 +14,7 @@ def handle(event, _):
 
     params = parse_qs(event['body'])
     text = params.get('text', 'help')[0].strip()
+    print('FINE request -> ', text)
 
     if re.match(HELP_REGEX, text):
         response_body = response.create_help_response()
@@ -33,6 +34,7 @@ def handle_fine_request(params, text):
     user_name_fined = re.search(FINE_REGEX, text).group(1).strip()
     fine_id = str(uuid.uuid4())
 
+    print('FINE writing to Dynamo -> {}, {}, {}'.format(team_id, channel_id, fine_id))
     dynamo.add_fine(team_id, channel_id, user_name, text, fine_id)
     return response.create_fine_response(user_name_fined)
     
