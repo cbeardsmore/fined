@@ -12,6 +12,7 @@ def handle(event, _):
 
     params = parse_qs(event['body'])
     text = params.get('text', 'help')[0].strip()
+    print('FINES request -> ', text)
 
     if re.match(HELP_REGEX, text):
         response_body = response.create_help_response()
@@ -28,6 +29,7 @@ def handle_fines_request(params):
     team_fines = dynamo.get_fines(team_id, channel_id)
 
     if not team_fines:
+        print('FINES no fines found')
         return response.create_no_fines_response()
 
     return response.create_fines_response(team_fines)

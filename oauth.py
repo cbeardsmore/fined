@@ -13,7 +13,10 @@ def handle(event, _):
     if query_parameters['state'] != ADD_TO_SLACK_STATE:
         return {'statusCode': 401}
 
+    print('OAUTH auth code received')
     team, access_token = exchange_auth_code(query_parameters['code'])
+
+    print('OAUTH access token received -> ', team)
     dynamo.update_access_token(team, access_token)
 
     return response.create_redirect_response()

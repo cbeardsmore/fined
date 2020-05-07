@@ -20,6 +20,7 @@ def handle(event, _):
 
     payload = json.loads(parse_qs(event['body'])['payload'][0])
     payload_type = payload['type']
+    print('INTERACTION payload received -> ', payload_type)
 
     if payload_type == BLOCK_INTERACTION_TYPE:
         handle_block_interaction(payload)
@@ -37,6 +38,7 @@ def handle_block_interaction(payload):
     team_id = payload['team']['id']
 
     if action_id == ACTION_PAY_FINE:
+        print('INTERACTION modal opened -> {}, {}, {}'.format(team_id, channel_id, action_value))
         open_modal(payload['trigger_id'], team_id, channel_id, action_value)
 
 
@@ -55,4 +57,6 @@ def handle_view_submission(payload):
     team_id = payload['team']['id']
     channel_id = payload['view']['callback_id']
     fine_id = payload['view']['private_metadata']
+    
+    print('INTERACTION deleting fine -> {}, {}, {}'.format(team_id, channel_id, fine_id))
     dynamo.delete_fine(team_id, channel_id, fine_id)
