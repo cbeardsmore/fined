@@ -65,7 +65,13 @@ functions:
       - http:
           path: oauth
           method: get
-
+  direct-install:
+    handler: direct_install.handle
+    description: Simple redirect to the OAuth flow for Slack direct install link
+    events:
+      - http:
+          path: direct-install
+          method: get
 resources:
   Resources:
     finesTable: 
