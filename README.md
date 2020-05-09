@@ -6,6 +6,7 @@
 
 <img src="./assets/fined_rounded.png" height="100">
 
+<img class="slackButton" alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x">
 
 Slack Bot for managing Team Fines running on the Serverless framework
 
@@ -13,7 +14,7 @@ Slack Bot for managing Team Fines running on the Serverless framework
 
 
 
-### Usage
+## Usage
 
 - Fine a user:
 
@@ -27,17 +28,7 @@ Slack Bot for managing Team Fines running on the Serverless framework
 
     `/fine help`
 
-### Serverless Framework
-
-- Install Framework and Plugins:
-
-    `npm install`
-
-- To deploy:
-
-    `serverless deploy`
-
-### Testing
+## Run Tests
 
 - Install Dependencies:
 
@@ -46,3 +37,13 @@ Slack Bot for managing Team Fines running on the Serverless framework
 - Run Tests:
  
      `./test/test.sh`
+     
+## Serverless Framework
+
+- Install Framework and Plugins:
+
+    `npm install`
+
+- To deploy:
+
+    `serverless deploy`
