@@ -1,6 +1,6 @@
 import json
 
-SLACK_INSTALL_REDIRECT_URL = 'https://cbeardsmore.github.io/projects?utm_source=fined_install_callback'
+SLACK_INSTALL_REDIRECT_URL = 'https://cbeardsmore.github.io/fined?utm_source=fined_install_callback'
 
 def wrap_response_body(response_body):
     return {
